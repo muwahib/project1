@@ -1,3 +1,16 @@
+<?php 
+include_once('config/db_conn.php');
+
+session_start();
+if(!isset($_SESSION['user_data']) && empty($_SESSION['user_data'])){
+    header('location: login_form.php');
+}else{
+    $logged_user = $_SESSION['user_data'];
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +24,7 @@
     <div class="container">
         <div class="content">
             <h3>hi, <span>user</span></h3>
-            <h1>welcome <span></span></h1>
+            <h1>welcome <span><?php  echo $logged_user['name'];?></span></h1>
             <p>this is an user page</p>
             <a href="login_form.php" class="btn">login</a>
             <a href="register_form.php" class="btn">register</a>

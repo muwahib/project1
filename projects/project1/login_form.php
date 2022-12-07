@@ -16,19 +16,16 @@ if(isset($_POST['submit'])){
     if($results->rowCount() > 0){
         $row = $database_conn->fetch_Assoc($results)[0];
 
-        // if($row['user_type'] == 'admin'){
+        if($row['user_type'] == 'admin'){
 
-        //     $_SESSION['admin_name'] = $row['name'];
-        //     header('location: admin_page.php');
+            $_SESSION['admin_name'] = $row['name'];
+            header('location: admin_page.php');
 
-        // }elseif($row['user_type'] == 'user'){
+        }elseif($row['user_type'] == 'user'){
 
-        //     $_SESSION['user_name'] = $row['name'];
-        //     header('location: user_page.php');
-        // }
-
-        $_SESSION['user_data'] = $row;
-        header('location: profile.php');
+            $_SESSION['user_data'] = $row;
+            header('location: user_page.php');
+        }
     }else{
         $error[] ='incorrect email or password!';
     }
