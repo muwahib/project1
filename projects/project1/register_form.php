@@ -4,14 +4,30 @@ $database_conn= new db_class;
 if(isset($_POST['submit'])){
     $name=$_POST['name'];
     $email=$_POST['email'];
-    $pass=$_POST['password'];
-    $pass=$_POST['cpassword'];
+    $pass=md5($_POST['password']);
+    $cpass=md5($_POST['cpassword']);
     $user_type=$_POST['user_type'];
 
     $sql="SELECT * FROM user_form WHERE email='$email' && password='$pass'";
     $results =$database_conn->query($sql);
     $results->execute();
+
+    if($results->rowCount() > 0){
+        $error[] = 'user already exist!';
+
+    }else{
+        if($pass != $cpass){
+            $error[]='password not matched';
+        }else{
+            $sql="INSERT INTO user_form(name,email,password,user_type) VALUES('$name','$email',
+            '$pass','$user_type')";
+            $results =$database_conn->query($sql);
+            $results->execute();
+            header('location: login_form.php');
+        }
+    }
 }
+
 
 ?>
 
@@ -29,6 +45,13 @@ if(isset($_POST['submit'])){
     <div class="form-container">
         <form action="" method="POST">
             <h3>Register</h3>
+            <?php
+            if(isset($error)){
+                foreach($error as $errors){
+                    echo '<span class="error-msg">' . $errors .'</span>';
+                }
+            }
+            ?>
             <input type="text" name="name" required placeholder="enter your name">
             <input type="text" name="email" required placeholder="enter your email">
             <input type="password" name="password" required placeholder="enter your password">
